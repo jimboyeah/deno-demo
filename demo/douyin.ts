@@ -71,7 +71,7 @@ class Douyin {
     let uid = this.uid(shareurl);
     // let uid = "59583160290";
     let sign = this.signature_module();
-    let signature = Deno.env.get("signature") || sign(uid);
+    let signature = Deno.env.get("signature") || (sign(uid), "R8qxlhATHPXt5fEW4KBhFkfKsY");
     let aweme_list: VideoInfo[] = [];
 
     let url = `https://www.iesdouyin.com/web/api/v2/aweme/${type}/?sec_uid=${sec_uid}&count=21&max_cursor=0&aid=1128&_signature=${signature}&dytk=`;
@@ -85,9 +85,12 @@ class Douyin {
       if(!posts.has_more) break;
       url = url.replace(/max_cursor=\d+/, `max_cursor=${posts.max_cursor}`);
     }
-
+    let record = this.parsePostsRecord();
     for(let it of aweme_list){
-      // this.log("item", it.aweme_id, it.desc, it.video.play_addr.url_list[0]);
+      if(record[it.aweme_id]) {
+        this.log("item was downloaded", it.aweme_id);
+        continue;
+      }
       this.downloadItem(it, homeurl, "");
     }
   }
@@ -116,6 +119,29 @@ class Douyin {
         this.downloadItem(it.item_list[0], "", infourl);
       }).catch(e => console.error(e));
     }
+  }
+  parsePostsRecord(file:string="posts.txt"){
+    let record:{[key: string]:boolean} = {};
+    let buffer;
+    try{
+      buffer = Deno.readFileSync(file);
+    }catch(e) {
+      this.log(file, e.message);
+      return record;
+    }
+    const decoder = new TextDecoder("utf-8");
+    let lines = decoder.decode(buffer).split('\n');
+    let tag = false;
+    for(let it of lines){
+      if(!tag){
+        tag = it.indexOf("[last parse]")>=0;
+        continue;
+      }
+      // find [last parse]
+      let match = /\[(\d+)\]/.exec(it);
+      match &&(record[match[1]] = true);
+    }
+    return record;
   }
 
   public fetchItem(shorturl: string) {

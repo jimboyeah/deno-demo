@@ -24,7 +24,7 @@
       "label": "Deno Debug",
       "type": "shell",
       "command": "deno",
-      "args": [ "run", "-A", "--inspect-brk", "${file}", ],
+      "args": [ "run", "-A", "--inspect-brk", "${file}", "https://v.douyin.com/ehHP93e/"],
       // open chrome://inspect
       "group": {
         "kind": "build",

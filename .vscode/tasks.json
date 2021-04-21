@@ -1,0 +1,42 @@
+// task.json
+{
+  // https://code.visualstudio.com/docs/editor/tasks
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Deno run",
+      "type": "shell",
+      "command": "deno",
+      "args": [ "run", "-A", "${file}", ], // deno run -A filename.ts
+      "group": {
+        "kind": "build",
+        "isDefault": true,
+      },
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "Deno Debug",
+      "type": "shell",
+      "command": "deno",
+      "args": [ "run", "-A", "--inspect-brk", "${file}", ],
+      // open chrome://inspect
+      "group": {
+        "kind": "build",
+        "isDefault": true,
+      },
+      "presentation": {
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    }
+  ]
+}

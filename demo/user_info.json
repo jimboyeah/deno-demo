@@ -1,0 +1,54 @@
+{
+  "status_code": 0,
+  "user_info": {
+    "short_id": "11067026",
+    "aweme_count": 58,
+    "total_favorited": "3311000",
+    "verification_type": 1,
+    "original_musician": { "music_count": 0, "music_used_count": 0 },
+    "followers_detail": null,
+    "region": "CN",
+    "signature": "170 金牛座  耐看型\n热爱舞蹈💃的懒癌宝藏👧\n接推👚👗🧦私信\n直播间刷Disco➕VX",
+    "avatar_thumb": {
+      "uri": "100x100/31bbd00025ac3b8118c8a",
+      "url_list": [
+        "https://p9.douyinpic.com/aweme/100x100/31bbd00025ac3b8118c8a.jpeg?from=2956013662",
+        "https://p6.douyinpic.com/aweme/100x100/31bbd00025ac3b8118c8a.jpeg?from=2956013662",
+        "https://p11.douyinpic.com/aweme/100x100/31bbd00025ac3b8118c8a.jpeg?from=2956013662"
+      ]
+    },
+    "avatar_medium": {
+      "uri": "720x720/31bbd00025ac3b8118c8a",
+      "url_list": [
+        "https://p29.douyinpic.com/aweme/720x720/31bbd00025ac3b8118c8a.jpeg?from=2956013662",
+        "https://p6.douyinpic.com/aweme/720x720/31bbd00025ac3b8118c8a.jpeg?from=2956013662",
+        "https://p3.douyinpic.com/aweme/720x720/31bbd00025ac3b8118c8a.jpeg?from=2956013662"
+      ]
+    },
+    "follower_count": 689000,
+    "unique_id": "0918jia",
+    "geofencing": null,
+    "policy_version": null,
+    "uid": "59583160290",
+    "following_count": 333,
+    "secret": 0,
+    "is_gov_media_vip": false,
+    "nickname": "嘉嘉",
+    "avatar_larger": {
+      "uri": "1080x1080/31bbd00025ac3b8118c8a",
+      "url_list": [
+        "https://p11.douyinpic.com/aweme/1080x1080/31bbd00025ac3b8118c8a.jpeg?from=2956013662",
+        "https://p9.douyinpic.com/aweme/1080x1080/31bbd00025ac3b8118c8a.jpeg?from=2956013662",
+        "https://p26.douyinpic.com/aweme/1080x1080/31bbd00025ac3b8118c8a.jpeg?from=2956013662"
+      ]
+    },
+    "favoriting_count": 6125,
+    "custom_verify": "",
+    "platform_sync_info": null,
+    "type_label": null
+  },
+  "extra": {
+    "now": 1618971206000,
+    "logid": "202104211013260102111720881308C7F1"
+  }
+}

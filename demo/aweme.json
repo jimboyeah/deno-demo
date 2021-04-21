@@ -1,0 +1,170 @@
+{
+  "status_code": 0,
+  "item_list": [
+    {
+      "create_time": 1606542945,
+      "music": {
+        "status": 1,
+        "id": 6884895305835810000,
+        "mid": "6884895305835809549",
+        "cover_hd": {
+          "uri": "1080x1080/317b6000a8cdf96451f85",
+          "url_list": [
+            "https://p29.douyinpic.com/aweme/1080x1080/317b6000a8cdf96451f85.jpeg?from=2563711402",
+            "https://p6.douyinpic.com/aweme/1080x1080/317b6000a8cdf96451f85.jpeg?from=2563711402",
+            "https://p3.douyinpic.com/aweme/1080x1080/317b6000a8cdf96451f85.jpeg?from=2563711402"
+          ]
+        },
+        "cover_large": {
+          "uri": "1080x1080/317b6000a8cdf96451f85",
+          "url_list": [
+            "https://p29.douyinpic.com/aweme/1080x1080/317b6000a8cdf96451f85.jpeg?from=2563711402",
+            "https://p6.douyinpic.com/aweme/1080x1080/317b6000a8cdf96451f85.jpeg?from=2563711402",
+            "https://p3.douyinpic.com/aweme/1080x1080/317b6000a8cdf96451f85.jpeg?from=2563711402"
+          ]
+        },
+        "cover_medium": {
+          "url_list": [
+            "https://p26.douyinpic.com/aweme/720x720/317b6000a8cdf96451f85.jpeg?from=2563711402",
+            "https://p11.douyinpic.com/aweme/720x720/317b6000a8cdf96451f85.jpeg?from=2563711402",
+            "https://p3.douyinpic.com/aweme/720x720/317b6000a8cdf96451f85.jpeg?from=2563711402"
+          ],
+          "uri": "720x720/317b6000a8cdf96451f85"
+        },
+        "play_url": {
+          "uri": "https://sf6-cdn-tos.douyinstatic.com/obj/ies-music/6884895266034535181.mp3",
+          "url_list": [
+            "https://sf6-cdn-tos.douyinstatic.com/obj/ies-music/6884895266034535181.mp3",
+            "https://sf3-cdn-tos.douyinstatic.com/obj/ies-music/6884895266034535181.mp3"
+          ]
+        },
+        "position": null,
+        "title": "@DJ.House创作的原声",
+        "author": "DJ.House",
+        "cover_thumb": {
+          "uri": "168x168/317b6000a8cdf96451f85",
+          "url_list": [
+            "https://p29.douyinpic.com/img/317b6000a8cdf96451f85~c5_168x168.jpeg?from=2563711402",
+            "https://p11.douyinpic.com/img/317b6000a8cdf96451f85~c5_168x168.jpeg?from=2563711402",
+            "https://p26.douyinpic.com/img/317b6000a8cdf96451f85~c5_168x168.jpeg?from=2563711402"
+          ]
+        },
+        "duration": 15
+      },
+      "long_video": null,
+      "group_id": 6900049391361560000,
+      "is_live_replay": false,
+      "anchor_info": { "id": "6601141770065561603", "name": "", "type": 2 },
+      "forward_id": "0",
+      "desc": "好大的痘痘 难搞😄",
+      "share_info": {
+        "share_weibo_desc": "#在抖音，记录美好生活#好大的痘痘 难搞😄",
+        "share_desc": "在抖音，记录美好生活",
+        "share_title": "好大的痘痘 难搞😄"
+      },
+      "image_infos": null,
+      "geofencing": null,
+      "promotions": null,
+      "video_labels": null,
+      "images": null,
+      "label_top_text": null,
+      "aweme_id": "6900049391361559815",
+      "author": {
+        "avatar_larger": {
+          "uri": "1080x1080/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3",
+          "url_list": [
+            "https://p26.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_1080x1080.jpeg?from=2563711402",
+            "https://p9.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_1080x1080.jpeg?from=2563711402",
+            "https://p3.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_1080x1080.jpeg?from=2563711402"
+          ]
+        },
+        "avatar_thumb": {
+          "uri": "100x100/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3",
+          "url_list": [
+            "https://p9.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_100x100.jpeg?from=2563711402",
+            "https://p6.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_100x100.jpeg?from=2563711402",
+            "https://p26.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_100x100.jpeg?from=2563711402"
+          ]
+        },
+        "avatar_medium": {
+          "uri": "720x720/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3",
+          "url_list": [
+            "https://p6.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_720x720.jpeg?from=2563711402",
+            "https://p26.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_720x720.jpeg?from=2563711402",
+            "https://p3.douyinpic.com/img/tos-cn-avt-0015/e57d2ed22ffebe07079aa8711b97a9d3~c5_720x720.jpeg?from=2563711402"
+          ]
+        },
+        "followers_detail": null,
+        "geofencing": null,
+        "uid": "111053083494",
+        "short_id": "2019920032",
+        "nickname": "qian小虎牙",
+        "policy_version": null,
+        "type_label": null,
+        "signature": "谢谢大家的喜欢与支持 不定期直播 谢谢大家关注💗💗💗",
+        "unique_id": "qian99703",
+        "platform_sync_info": null
+      },
+      "video": {
+        "cover": {
+          "uri": "tos-cn-p-0015/f9dec9a41bf54f7fbf82dc5a0124007a",
+          "url_list": [
+            "https://p11.douyinpic.com/img/tos-cn-p-0015/f9dec9a41bf54f7fbf82dc5a0124007a~c5_300x400.jpeg?from=2563711402_large",
+            "https://p26.douyinpic.com/img/tos-cn-p-0015/f9dec9a41bf54f7fbf82dc5a0124007a~c5_300x400.jpeg?from=2563711402_large",
+            "https://p3.douyinpic.com/img/tos-cn-p-0015/f9dec9a41bf54f7fbf82dc5a0124007a~c5_300x400.jpeg?from=2563711402_large"
+          ]
+        },
+        "height": 1920,
+        "origin_cover": {
+          "url_list": [
+            "https://p26.douyinpic.com/tos-cn-p-0015/546d048cfa1e4b40b5bbf32050b7a72e_1606542952~tplv-dy-360p.jpeg?from=2563711402",
+            "https://p3.douyinpic.com/tos-cn-p-0015/546d048cfa1e4b40b5bbf32050b7a72e_1606542952~tplv-dy-360p.jpeg?from=2563711402",
+            "https://p11.douyinpic.com/tos-cn-p-0015/546d048cfa1e4b40b5bbf32050b7a72e_1606542952~tplv-dy-360p.jpeg?from=2563711402"
+          ],
+          "uri": "tos-cn-p-0015/546d048cfa1e4b40b5bbf32050b7a72e_1606542952"
+        },
+        "ratio": "720p",
+        "bit_rate": null,
+        "duration": 11029,
+        "play_addr": {
+          "uri": "v0200f1e0000bv0uciuvbvc7rbc5r02g",
+          "url_list": [
+            "https://aweme.snssdk.com/aweme/v1/playwm/?video_id=v0200f1e0000bv0uciuvbvc7rbc5r02g&ratio=720p&line=0"
+          ]
+        },
+        "width": 1080,
+        "dynamic_cover": {
+          "url_list": [
+            "https://p3.douyinpic.com/obj/tos-cn-p-0015/205c1694b25844079b8d33923af4f360_1606543006?from=2563711402_large",
+            "https://p26.douyinpic.com/obj/tos-cn-p-0015/205c1694b25844079b8d33923af4f360_1606543006?from=2563711402_large",
+            "https://p11.douyinpic.com/obj/tos-cn-p-0015/205c1694b25844079b8d33923af4f360_1606543006?from=2563711402_large"
+          ],
+          "uri": "tos-cn-p-0015/205c1694b25844079b8d33923af4f360_1606543006"
+        },
+        "has_watermark": true,
+        "vid": "v0200f1e0000bv0uciuvbvc7rbc5r02g"
+      },
+      "aweme_type": 4,
+      "risk_infos": { "warn": false, "type": 0, "content": "" },
+      "author_user_id": 111053083494,
+      "video_text": null,
+      "is_preview": 0,
+      "share_url": "https://www.iesdouyin.com/share/video/6900049391361559815/?region=&mid=6884895305835809549&u_code=48&titleType=title&did=MS4wLjABAAAANwkJuWIRFOzg5uCpDRpMj4OX-QryoDgn-yYlXQnRwQQ&iid=MS4wLjABAAAANwkJuWIRFOzg5uCpDRpMj4OX-QryoDgn-yYlXQnRwQQ&with_sec_did=1",
+      "statistics": {
+        "digg_count": 1995,
+        "play_count": 0,
+        "share_count": 127,
+        "aweme_id": "6900049391361559815",
+        "comment_count": 94
+      },
+      "cha_list": null,
+      "text_extra": [],
+      "comment_list": null,
+      "duration": 11029
+    }
+  ],
+  "extra": {
+    "now": 1618902637000,
+    "logid": "202104201510370102121600261F001E4F"
+  }
+}

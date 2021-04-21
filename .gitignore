@@ -1,0 +1,15 @@
+deno_src
+deno_doc
+doc_website
+node-clinic-doctor-examples
+std@0.90.0
+webgpu-examples
+node_modules
+video*
+*.mp4
+*.lnk
+*.cpuprofile
+*.log
+.clinic
+# get deno d.ts: git clone git@github.com:deno\deno_src.git
+cli\dts\lib.deno.ns.d.ts

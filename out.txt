@@ -1,0 +1,3 @@
+
+C:\coding\md-code\deno>deno run -A demo\douyin.ts likes https://v.douyin.com/ehuN3kx 
+posts [2mundefined[22m https://www.iesdouyin.com/web/api/v2/aweme/like/?sec_uid=MS4wLjABAAAA2aZ1tubxcJ-I-8eYJLxp2Tbnj5Y93Za4qa2mnmjiGdQ&count=21&max_cursor=0&aid=1128&_signature=q.Il.AAAy31Nl7qj32qNO6vyJe&dytk=

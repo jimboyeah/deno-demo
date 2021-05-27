@@ -347,7 +347,7 @@ export default class Douyin {
         if(it.status==="fulfilled") {
           list.push(it.value);
         }else{
-          console.error(it.status, it.reason.message)
+          // console.error(it.status, it.reason.message)
         }
       }
     });
@@ -501,6 +501,7 @@ if(import.meta.main && Deno.args.length){
   download video from v.douying.com
   set signature=signature=q.Il.AAAy31Nl7qj32qNO6vyJe
   deno run -A douyin.ts parse posts.txt
+  deno run -A douyin.ts force 6902407231078223118...
   deno run -A douyin.ts scan 2 e5EmMdo ekXJHkm ekPAVcG
   deno run -A douyin.ts m3u8 play.m3u8
   deno run -A douyin.ts https://v.douyin.com/eh1PpKh/ https://v.douyin.com/eh1Hs4L/

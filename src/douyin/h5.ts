@@ -43,7 +43,7 @@ let page = parseInt(Deno.args[0]);
 let from = Deno.args[1];
 
 if(!page) page = 64;
-if(!from) from = "ekXJNYt"; // ekXJHkm: DON'T CHANGE THIS LINE
+if(!from) from = "ekXJViB"; // ekXJHkm: DON'T CHANGE THIS LINE
 
 function updateSelf(){
   let path = join(ScriptDir, "h5.ts");
@@ -58,39 +58,40 @@ let items: ShareItem[] = [];
 let videos: VideoInfo[] = [];
 
 // for await (const event of webview.iter()) { 。。 }
-webview.run(async (event: string) => {
+webview.run((event: string) => {
+  console.error("⚑", event);
   if(event.startsWith("fetch_video|")){
     let url = event.split("|")[1];
-    console.error("fetch_video", url);
-    let json:ItemInfo = await dy.fetchItem(url) as ItemInfo;
-    webview.eval(`fetch_video_cb(${JSON.stringify(json)})`)
+    dy.fetchItem(url).then((json: ItemInfo|void)=>{
+      json && webview.eval(`fetch_video_cb(${JSON.stringify(json)})`)
+    });
   } else if(event.startsWith("add_favorite|")){
     let from = event.split("/").splice(-2)[0];
-    console.error(event, from);
     from && dy.addScanList([from]);
   } else if(event.startsWith("favorite|")){
-    items = await dy.updateScanList([]);
-    // console.error(`favorite`, items);
-    webview.eval(`favorite_cb(${JSON.stringify(items)})`);
+    dy.updateScanList([]).then( (list:ShareItem[]) => {
+      items = list;
+      webview.eval(`favorite_cb(${JSON.stringify(list)})`);
+    });
   } else if(event.startsWith("fetch_aweme|")){
     let aweme_id = event.split("|")[1];
-    console.error(event);
     dy.fetchItemById(aweme_id);
   } else if(event.startsWith("fetch_home|")){
     let url = event.split('|')[1];
     let type = event.split('|')[2] as ("post"|"like");
-    console.error("fetch_home", url);
-    videos = await dy.fetchHomeList(url, type);
-    let jsn = JSON.stringify(videos);
-    webview.eval(`fetch_home_cb(${jsn})`)
+    dy.fetchHomeList(url, type).then((videos:VideoInfo[]) =>{
+      let jsn = JSON.stringify(videos);
+      webview.eval(`fetch_home_cb(${jsn})`)
+    })
   } else if ("fetch|" === event) {
-    let json2 = await dy.scanShareURL(page, from);
-    from = counter.add(page);
-    items = items.concat(...json2);
-    console.error({page, from, list: items.length});
-    if(items.length>200) items.splice(0, 100);
-    webview.eval(`fetch_cb(${JSON.stringify(items)})`);
-    updateSelf();
+    dy.scanShareURL(page, from).then((list:ShareItem[]) => {
+      from = counter.add(page);
+      items = items.concat(...list);
+      console.error({page, from, list: items.length});
+      if(items.length>200) items.splice(0, 90);
+      webview.eval(`fetch_cb(${JSON.stringify(items)})`);
+      updateSelf();
+    })
   } else if ("End" === event) {
       webview.drop();
   } else if ("test" === event) {
@@ -98,8 +99,6 @@ webview.run(async (event: string) => {
       webview.eval("test();");
   } else if ("finish" === event) {
       console.timeEnd();
-  } else { 
-      console.error("⚑", event);
   }
 });
 

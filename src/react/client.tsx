@@ -1,6 +1,6 @@
 import React from "https://dev.jspm.io/react@16.13.1";
 import ReactDOM from "https://dev.jspm.io/react-dom@16.13.1";
-import App from "./app.tsx";
+import { App } from "./app.tsx";
 
 (ReactDOM as any).hydrate(
   <App />,

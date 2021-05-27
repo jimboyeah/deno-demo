@@ -3,6 +3,9 @@
 	[
 		{
 			"path": "."
+		},
+		{
+			"path": "C:\\coding\\md-code\\deno\\quickjs-rs\\quickjs"
 		}
 	]
 }

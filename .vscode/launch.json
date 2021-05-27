@@ -10,7 +10,7 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "deno",
-      "runtimeArgs": ["run", "--inspect-brk", "--allow-env", "--unstable", "--allow-net", "${file}", "https://api.github.com/users/github"],
+      "runtimeArgs": ["run", "--inspect-brk", "--unstable", "--allow-env", "--allow-net", "${file}", "https://v.douyin.com/ehCbUjE/"],
       "outputCapture": "std",
       "attachSimplePort": 9229
     },
@@ -20,7 +20,7 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "Node",
-      "runtimeArgs": ["--inspect-brk", "${file}", "https://api.github.com/users/github"],
+      "runtimeArgs": ["--inspect-brk", "${file}", "https://v.douyin.com/ehCbUjE/"],
       "outputCapture": "std",
       "attachSimplePort": 9229
     },
@@ -30,7 +30,7 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "deno",
-      "runtimeArgs": ["run", "--allow-env", "--unstable", "--allow-net", "${file}", "https://api.github.com/users/github"],
+      "runtimeArgs": ["run", "--unstable", "--allow-env", "--allow-net", "${file}", "https://v.douyin.com/ehCbUjE/"],
     },
     {
       "name": "Cargo Run",

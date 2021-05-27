@@ -1,0 +1,30 @@
+{
+  "name": "deno",
+  "version": "1.0.0",
+  "description": "Deno 是新一代基于 TypeScript 语言的编程平台，是 Node 平台之外的又一选择，它们都是由 Ryan Dahl 发起的项目，鉴于 Node 的一些不足，他决定放弃 Node.js，从头写一个替代品：",
+  "main": "index.js",
+  "dependencies": {
+    "esprima": "^4.0.1",
+    "inquirer": "^8.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "deno test demo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimboyeah/deno-demo.git"
+  },
+  "keywords": [
+    "Deno",
+    "Node",
+    "Module",
+    "Demo"
+  ],
+  "author": "Jeango",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jimboyeah/deno-demo/issues"
+  },
+  "homepage": "https://github.com/jimboyeah/deno-demo#readme"
+}

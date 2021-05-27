@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Worker</title>
+  <style>
+    * {
+      font-family: Helvetica;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="console">
+    <div>Service Worker:</div>
+    <p class="txt">
+      Service worker 可以进行请求拦截，服务线程安装后就使用服务监听请求，并缓存资源，但不可访问 DOM。
+      可以通过 <a href="chrome://serviceworker-internals">chrome://serviceworker-internals</a> 来查看详情，
+      今后有可能被 <a href="chrome://inspect/#service-workers">chrome://inspect/#service-workers</a> 完全取代。
+    </p>
+    <p class="txt"><a href="https://developers.google.cn/web/fundamentals/primers/service-workers?hl=zh-cn">Service Worker 参考<a/></p>
+    <div id="isSupport">[]</div>
+    <div id="state">[]</div>
+    <div id="swState">[]</div>
+    <div id="isSuccess">[]</div>
+    <div id="root"></div>
+  </div>
+  <script>
+    let $ = (id) => {
+      let dom = document.getElementById(id.replace("#",""));
+      return {
+        dom,
+        text: (txt)=>{dom.innerHTML=txt},
+        append: (txt)=>{dom.innerHTML+=txt},
+      }
+    };
+    if ('serviceWorker' in navigator) {
+        $('#isSupport').text('支持 Service Worker');
+    
+        navigator.serviceWorker.register('./service.worker.js', {
+            scope: './'
+        }).then(function (registration) {
+            $('#isSuccess').text('Service Worker 注册成功:'+JSON.stringify(registration.scope));
+    
+            var serviceWorker;
+            if (registration.installing) {
+                serviceWorker = registration.installing;
+                $('#state').text('installing');
+            } else if (registration.waiting) {
+                serviceWorker = registration.waiting;
+                $('#state').text('waiting');
+            } else if (registration.active) {
+                serviceWorker = registration.active;
+                $('#state').text('active');
+            }
+            if (serviceWorker) {
+                $('#swState').text(serviceWorker.state);
+                serviceWorker.addEventListener('statechange', function (e) {
+                    $('#swState').append('&emsp;状态变化为' + e.target.state);
+                });
+            }
+        }).catch (function (error) {
+            $('#isSuccess').text('Service Worker 注册失败');
+        });
+    } else {
+        $('#isSupport').text('不支持 Service Worker');
+    }
+    </script>
+</body>
+
+</html>

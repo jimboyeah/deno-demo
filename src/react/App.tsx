@@ -11,7 +11,7 @@
 import React from "https://dev.jspm.io/react@16.13.1";
 // console.log({React});
 
-const AppFC = () => {
+export const AppFC = () => {
   let [ss, setCount] = React.useState({count: 0});
   let count = ss.count + 1;
   let set = () => setCount({count});
@@ -24,7 +24,7 @@ const AppFC = () => {
   );
 };
 
-class App extends React.Component {
+export class App extends React.Component {
   state = {value:0}
   render(){
     let {value: count} = this.state;
@@ -39,5 +39,7 @@ class App extends React.Component {
     );
   }
 }
-
+// Cannot use JSX unless the '--jsx' flag is provided.
+// "jsx": "react",
+console.log(<App />);
 export default App;

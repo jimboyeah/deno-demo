@@ -1,3 +1,16 @@
+# Install
+
+先安装好 [Deno](https://github.com/denoland/deno)
+
+安装依赖：
+
+    npm install
+
+运行测试：
+
+    deno test demo
+
+
 Deno 是新一代基于 TypeScript 语言的编程平台，是 Node 平台之外的又一选择，它们都是由 Ryan Dahl 发起的项目，鉴于 Node 的一些不足，他决定放弃 Node.js，从头写一个替代品：
 
 Deno - A secure runtime for JavaScript and TypeScript.
@@ -34,11 +47,13 @@ Deno VS Node
 | 打包、测试、格式化   | 第三方如 eslint、gulp、webpack、babel 等    | 原生支持            |
 
 
-![抖音小姐姐下载](https://upload-images.jianshu.io/upload_images/5509701-2b44aa21e24a551e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![抖音小姐姐下载](https://upload-images.jianshu.io/upload_images/5509701-ec667b8acf47a1c1.jpg)
 
 下载速度简直不要太快：
 
 ![wifi flow](https://upload-images.jianshu.io/upload_images/5509701-0b44ed486f6e6b39.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![浏览阿婆主页](https://upload-images.jianshu.io/upload_images/5509701-c765337fefd33d03.png)
 
 需要安装 Deno，再运行示范程序：
 

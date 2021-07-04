@@ -1,65 +1,30 @@
-/* 
-curl https://v.douyin.com/eh1PBg6/
-curl https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=6900049391361559815
-curl https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=6794855115779099918
-
-Usage:
-
-deno run -A douyin.ts https://v.douyin.com/eh1PpKh/ https://v.douyin.com/eh1Hs4L/
-
-HOME
-Copy Link from User HomePage: 
-http://v.douyin.com/ehSh5Cy
-https://www.iesdouyin.com/share/user/59583160290?iid=MS4wLjABAAAAfHGThHwzekZzgweoYB1g6dXrgNUxchkGJuRinOKRw64&amp;with_sec_did=1&amp;u_code=19c8clcl7&amp;sec_uid=MS4wLjABAAAA06xUG37YAhRl8nWJ3vEG_CMMJZ47rnxLY96CAvUqoRg&amp;did=MS4wLjABAAAAkVGBM0wz65Lf4cAkKkjl9UZvnxBdSv_V0JBV0iHk8C_nlfAMkrtFY0nJbiRPbW12&amp;timestamp=1618970881&amp;utm_source=copy&amp;utm_campaign=client_share&amp;utm_medium=android&amp;share_app_name=douyin
-
-https://www.iesdouyin.com/web/api/v2/user/info/?sec_uid=MS4wLjABAAAA06xUG37YAhRl8nWJ3vEG_CMMJZ47rnxLY96CAvUqoRg
-https://www.iesdouyin.com/web/api/v2/aweme/licke/?sec_uid=MS4wLjABAAAA06xUG37YAhRl8nWJ3vEG_CMMJZ47rnxLY96CAvUqoRg
-https://www.iesdouyin.com/web/api/v2/aweme/post/?sec_uid=MS4wLjABAAAA06xUG37YAhRl8nWJ3vEG_CMMJZ47rnxLY96CAvUqoRg&count=21&max_cursor=0&aid=1128&_signature=VHoupQAANAiyH7H6JvRmvVR6Lr&dytk=
-
-URL 签名 signature 随时间变化动态生成，可以在页面使用调式工具设置 fetch breakpoints，再根据调用栈定位到 init 方法：
-
-    function init(config) {
-      dytk = config.dytk;
-      params.user_id = config.uid;
-      params.sec_uid = _utils2.default.getUrlParam(window.location.href, "sec_uid");
-
-      if (params.sec_uid != "") {
-        delete params.user_id;
-      }
-
-      config.sec_uid = params.sec_uid;
-      nonce = config.uid;
-      signature = (0, _bytedAcrawler.sign)(nonce);
-      // ...
-    }
-
-根据打包机嵌入的信息找到 bytedAcrawler 的实现，其导出模块位置 vendor.a59687bc.js:1096。
-
-所谓模块，就是一个独立命名空间的闭包，在需要使用时就请求加载它。将模块提取出来，用它对 uid 进行处理就可以得到签名。
-
-模块提供的是混淆过的代码，参考 JavaScript Obfuscator Tool  https://obfuscator.io
-
-由于 bytedAcrawler 提供的签名算法借用了浏览器对象 navigator 来保证算法运行环境为浏览器，否则尝试读取 userAgent 会导致运行出错，实现了运行环境安全。
-
-通过逆向，即像脚本引擎一样破解算法内部，只需给代码打一个补订即可解决，不过时间也是花了大半天：
-
-    .replace(/return r$/,"this.navigator = {userAgent:''};return r")
-
-SHARE
-https://www.iesdouyin.com/share/video/6715818142016212237/
-https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=6715818142016212237
-
-*/
-import { join, dirname, fromFileUrl } from "https://deno.land/std@0.95.0/path/mod.ts";
 import { existsSync } from "https://deno.land/std/fs/mod.ts";
+import { dirname, fromFileUrl, join } from "https://deno.land/std@0.95.0/path/mod.ts";
 
 export default class Douyin {
-  MaxItems = 200;
+  MaxItems = 400;
   Force = false;
   ScriptDir:string;
   SavePath: string = "videos";
+  FavoriteList: string = "favorite.json";
   userAgent: string = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"
-  record;
+  record:{[key: string]: boolean};
+  APIS = {
+    /**
+     * "https://www.iesdouyin.com/web/api/v2/user/info/?sec_uid={id}"
+     */
+    UserInfo:"https://www.iesdouyin.com/web/api/v2/user/info/?sec_uid={id}",
+    Likes   :"https://www.iesdouyin.com/web/api/v2/aweme/like/?sec_uid={id}&count=21&max_cursor=0&aid=1128&_signature={s}&dytk=",
+    Posts   :"https://www.iesdouyin.com/web/api/v2/aweme/post/?sec_uid={id}&count=21&max_cursor=0&aid=1128&_signature={s}&dytk=",
+    /**
+     * `https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids={aweme_id}`,
+     */
+    Video   : "https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids={aweme_id}",
+    /**
+     * "https://v.douyin.com/{tag}/"
+     */
+    ShareURL: "https://v.douyin.com/{tag}/",
+  };
 
   constructor(){
     this.ScriptDir = dirname(fromFileUrl(Deno.mainModule))
@@ -92,15 +57,20 @@ export default class Douyin {
   }
   async fetchHomeList(homeurl:string, type:"post"|"like"){
     let shareurl = await this.fetch_url(homeurl);
-    let url = this.homeListUrl(shareurl, type) as string;
+    let url = this.homeListUrl(shareurl, type);
     let aweme_list: VideoInfo[] = [];
+    if(url === false) return [];
 
     let current = this.MaxItems;
     while(true){
-      let req = new Request(url);
+      let req:Request = new Request(url);
       req.headers.append("User-Agent", this.userAgent);
-      let posts = await fetch(req).then(res => res.json() as Promise<Posts>);
-      this.error("posts", posts.aweme_list.length, posts.max_cursor, url);
+      let posts:Posts = await fetch(req).then(res => res.json() as Promise<Posts>);
+      if(posts.aweme_list){
+        this.error("posts", posts.aweme_list.length, posts.max_cursor, url);
+      }else{
+        this.error("aweme_list check", url);
+      }
       aweme_list.push(...posts.aweme_list);
       current -= posts.aweme_list.length;
       if(!posts.has_more || (current)<0) break;
@@ -176,7 +146,7 @@ export default class Douyin {
     }).catch(e => console.error(e.message, shorturl));
   }
   
-  public fetchItemById(aweme_id: string) {
+  async fetchItemById(aweme_id: string) {
     let infourl = aweme_id;
     return this.iteminfo(aweme_id).then((it: ItemInfo) => {
       let videoinfo = it.item_list[0];
@@ -202,7 +172,7 @@ export default class Douyin {
       nickname, uid, `[${aweme_id}]`, item.desc,
       // infourl, videourl
     );
-    let cov = await this.get_cover(coverurl, `${this.SavePath}/${uid}-${aweme_id}-${duration}.jpg`);
+    // let cov = await this.get_cover(coverurl, `${this.SavePath}/${uid}-${aweme_id}-${duration}.jpg`);
     let veo = await this.get_video(videourl, `${this.SavePath}/${uid}-${aweme_id}-${duration}.mp4`);
     if(veo) {
       return Error(`[${aweme_id}]${veo.message} ${item.desc} ${videourl}`);
@@ -239,7 +209,7 @@ export default class Douyin {
     return "";
   }
   async iteminfo(id:string): Promise<ItemInfo> {
-    let url = `https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=${id}`;
+    let url = this.APIS.Video.replace("{aweme_id}", id);
     return fetch(url).then(res => {
       return res.json() as Promise<ItemInfo>;
     });
@@ -311,33 +281,60 @@ export default class Douyin {
     }
   }
 
-  async scanShareURL(count = 10000, from:string|string[] = "0000000"){
-    let items:Promise<any>[] = [];
-    let saved:ShareItem[] = [];
-    if(from instanceof Array){
-      saved = await this.addScanList(from);
-      from = from.slice(-1)[0];
-    }
+  async scanShareURL(count = 10000, from:string = "0000000"): Promise<ShareItem[]>{
+    let tasks:Promise<any>[] = [];
+    let list:ShareItem[] = [];
     let counter = new Counter(from);
     for (let index = 0; index < count; index++) {
       // let item = await this.tryShareURL(from);
       let item = this.tryShareURL(from);
-      items.push(item);
+      tasks.push(item);
+      if(tasks.length>5 || index+1>=count){
+        let res = await this.conductScanList(tasks);
+        list.concat(...this.filterShareItems(res));
+        tasks.splice(0);
+      }
       from = counter.add();
     }
-    let list = await this.conductScanList(items);
-    list = saved.concat(...list);
-    console.log(JSON.stringify(list, null, "  "));
     return list;
   }
 
-  async addScanList(from: string[]){
+  filterShareItems(res: ShareItem[]){
+    let it;
+    let list = [];
+    while(it = res.shift()){
+      // let key = it.type==="user"? it.uid:it.aweme_id;
+      let key = it.aweme_id || it.uid;
+      if(this.record[key]){
+        console.error("filter:", it.nickname, key, it.type, it.url);
+        continue;
+      }
+      this.record[key] = true;
+      list.push(it);
+      // console.log(JSON.stringify(it, null, "  "));
+      // let json = JSON.stringify(it, null, "  ")+",\n"
+      // Deno.writeAll(Deno.stdout, new TextEncoder().encode(json));
+    }
+    return list
+  }
+  
+  async scanFavoriteList(from: string[]){
+    let list = await this.scanList(from);
+    return this.updateScanList(list);
+  }
+  
+  async scanList(from: string[]){
+    // if(from instanceof Array){
     let items:Promise<any>[] = [];
     for (const it of from) {
       items.push(this.tryShareURL(it));
     }
     let list = await this.conductScanList(items);
-    return this.updateScanList(list);
+    list = this.filterShareItems(list);
+    list.forEach(it => {
+      console.log(JSON.stringify(it, null, "  ")+",");
+    });
+    return list; 
   }
 
   async conductScanList(items:Promise<any>[]){
@@ -347,7 +344,7 @@ export default class Douyin {
         if(it.status==="fulfilled") {
           list.push(it.value);
         }else{
-          // console.error(it.status, it.reason.message)
+          console.error(it.status, it.reason.message)
         }
       }
     });
@@ -355,10 +352,10 @@ export default class Douyin {
   }
 
   async updateScanList(list:ShareItem[]){
-    let path = join(this.ScriptDir, "scan.json");
+    let path = join(this.ScriptDir, this.FavoriteList);
     let buf = Deno.readFileSync(path);
-    let scan = JSON.parse(new TextDecoder("utf-8").decode(buf));
-    scan = scan.concat(...list);
+    let scan = !buf.length? []:JSON.parse(new TextDecoder("utf-8").decode(buf));
+    scan = list.reverse().concat(...scan.reverse());
     let userids:{[key:string]: boolean} = {};
     let res: ShareItem[] = [];
     for (const it of scan) {
@@ -366,13 +363,14 @@ export default class Douyin {
       userids[it.uid] = true;
       res.push(it);
     }
+    res.reverse();
     let txt =  new TextEncoder().encode(JSON.stringify(res, null, '  '));
     Deno.writeFileSync(path, txt)
-    return res;
+    return res; 
   }
 
   async tryShareURL(tag:string): Promise<ShareItem|Error|null>{
-    let url = `https://v.douyin.com/${tag}/`;
+    let url = this.APIS.ShareURL.replace('{tag}', tag);
     let init:RequestInit = {
       // method: "POST",
       // redirect: "manual",
@@ -384,59 +382,116 @@ export default class Douyin {
     let req = new Request(url, init);
     return fetch(req).then(res =>{
       if(res.url.indexOf("/404")>=0 || res.status == 404){
-        throw Error("404 " + url);
+        throw Error("404 Not Found");
       }
       return res.url;
     }).then(shareurl => {
+      let sec_uid = this.sec_uid(shareurl) as string;
       if (shareurl.indexOf("/share/video/")>=0){
         let aweme_id = this.aweme_id(shareurl);
         return this.iteminfo(aweme_id).then(iteminfo => {
           let item = iteminfo.item_list[0];
-          if(!item) throw Error("noposts " + url);
+          if(!item) throw Error("NOVIDEO");
           let author = item.author;
           let video = item.video;
           let uid = author.unique_id || author.short_id;
-          let videourl = video.play_addr.url_list[0].replace("playwm", "play");
           let cover = video.cover.url_list[0];
           let nickname = author.nickname;
           let desc = item.desc;
-          let json:ShareItem = {type:"video", nickname, uid, desc, url, cover};
-          // this.log(JSON.stringify(json, null, '  '), ",");
+          let sec_uid = item.author.sec_uid || "";
+          let json:ShareItem = {type:"video", nickname, uid, sec_uid, aweme_id, desc, url, cover};
           return json;
         }).catch(e => {
-          // console.log(e.message, shareurl);
           throw e;
         })
       }else if(shareurl.indexOf("/share/user/")>=0){
         let listurl = this.homeListUrl(shareurl, "post");
         if(listurl === false){
-          // this.log("broken", shareurl);
           throw Error("broken " + shareurl); 
         }
-        // this.log("user", url);
         return fetch(listurl).then( res => res.json() as Promise<Posts> ).then(posts => {
           let item = posts.aweme_list[0];
-          if(!item) throw Error("noposts " + url);
+          if(!item) {
+            return fetch(this.APIS.UserInfo.replace("{id}", sec_uid))
+            .then( res => res.json())
+            .then( (it:UserInfo) => {
+              let author = it.user_info;
+              let uid = author.unique_id || author.short_id;
+              let cover = author.avatar_larger.url_list[0];
+              let nickname = author.nickname;
+              let desc = author.signature + " NOPOSTS";
+              let json: ShareItem = {type:"user", nickname, uid, sec_uid, aweme_id:"", desc, url, cover};
+              return json;
+            });
+            // throw Error("NOPOSTS");
+          }
           let author = item.author;
           let uid = author.unique_id || author.short_id;
           let cover = author.avatar_larger.url_list[0];
           let nickname = author.nickname;
           let desc = author.signature
-          let json: ShareItem = {type:"user", nickname, uid, desc, url, cover};
-          // this.log(JSON.stringify(json, null, '  '), ",");
+          // let sec_uid = item.author.sec_uid || "";
+          let json: ShareItem = {type:"user", nickname, uid, sec_uid, aweme_id:"", desc, url, cover};
           return json;
         }).catch(e => {
-          // console.log(e.message, listurl);
           throw e;
         })
       }else{
-        // if(shareurl.indexOf("/share/invite/")>=0){
-        // this.log("shareurl", url, shareurl.split("?")[0]);
         throw Error("shareurl " + shareurl.split("?")[0])
       }
-    }).catch(e => {throw e})
+    }).catch(e => {throw Error(`Error ${url} ` + e.message)})
+  }
+
+  async subprocess(cmd: string[]) {
+    const p = Deno.run({ cmd, stderr: 'piped', stdout: 'piped' });
+    const [status, stdout, stderr] = await Promise.all([
+      p.status(),
+      p.output(),
+      p.stderrOutput()
+    ]);
+    p.close();
+    // let msg = String.fromCharCode.apply(null, rawOutput as any);
+    let msg = new TextDecoder("utf-8").decode(stdout);
+    let err = new TextDecoder("utf-8").decode(stderr);
+    return {status, msg, err, stdout, stderr};
+  }
+
+  async scanFileShareURL(text: string) {
+    let list = text.trim().split(/\n|\s+/g);
+    let res = "";
+    let step = 15;
+    let path = import.meta.url;
+
+    for (let idx = 0; idx < list.length; idx += step) {
+      let tags = list.slice(idx, idx+step);
+      let cmd = ["deno", "run", "-A", "--unstable", path, "scanlist", ...tags];
+      let {status, msg, err, stdout, stderr} = await this.subprocess(cmd);
+      res += msg;
+      console.log(msg);
+      console.error(err, tags, "done!");  
+    }
+    res = res.replace(/\n/g, "").trim().replace(/,\s*$/, "");
+    let items:ShareItem[] = JSON.parse(`[${res}]`);
+    return items;
   }
   
+  async scanInSubproce(from: string, page: number, step = page):Promise<ShareItem[]> {
+    let res = "";
+    let path = import.meta.url;
+    let counter = new Counter(from);
+    for (let idx = 0; idx < page; idx += step) {
+      let cmd = ["deno", "run", "-A", "--unstable", path, "scan", step + "", from];
+      let {status, msg, err, stdout, stderr} = await this.subprocess(cmd);
+      res += msg;
+      console.log(msg);
+      console.error(err);  
+      from = counter.add(step);
+    }
+    res = res.replace(/\n/g, "").trim().replace(/,\s*$/, "");
+    let items:ShareItem[] = JSON.parse(`[${res}]`);
+    items = this.filterShareItems(items);
+    return items;
+  }
 
   signature_module() {
     let exports = {sign:(s:string):string => ""};
@@ -490,28 +545,47 @@ if(import.meta.main && Deno.args.length){
     dy.parseM3U8(Deno.args[1])
   }else if("force" === act){
     dy.downloadForce(Deno.args.slice(1))
+  }else if("subscan" === act){
+    let steps = parseInt(Deno.args[1]);
+    let from = Deno.args[2];
+    dy.scanInSubproce(from, steps, 48);
+  }else if("scanfav" === act){
+    let from = Deno.args.slice(1);
+    dy.scanFavoriteList(from);
+  }else if("scanlist" === act){
+    let from = Deno.args.slice(1);
+    dy.scanList(from);
   }else if("scan" === act){
-    let from = (Deno.args.length>3)? Deno.args.slice(2): Deno.args[2];
-    dy.scanShareURL(parseInt(Deno.args[1]), from)
+    if(Deno.args.length==2) {
+      let file = Deno.args[1];
+      let text = Deno.readTextFileSync(file);
+      dy.scanFileShareURL(text);
+    }else{
+      let from = Deno.args[2];
+      dy.scanShareURL(parseInt(Deno.args[1]), from)
+    }
   }else{
     dy.downloadList(Deno.args);
   }
 }else{
-  console.log(`
-  download video from v.douying.com
+  console.error(`
+  download video from v.douying.com:
   set signature=signature=q.Il.AAAy31Nl7qj32qNO6vyJe
   deno run -A douyin.ts parse posts.txt
   deno run -A douyin.ts force 6902407231078223118...
-  deno run -A douyin.ts scan 2 e5EmMdo ekXJHkm ekPAVcG
+  deno run -A douyin.ts scan listfile
+  deno run -A douyin.ts scan 3 ekXJHkm
+  deno run -A douyin.ts subscan 3 ekXJHkm
+  deno run -A douyin.ts scanlist e5EmMdo ekXJHkm ekPAVcG
+  deno run -A douyin.ts scanfav e5EmMdo ekXJHkm ekPAVcG
   deno run -A douyin.ts m3u8 play.m3u8
   deno run -A douyin.ts https://v.douyin.com/eh1PpKh/ https://v.douyin.com/eh1Hs4L/
   deno run -A douyin.ts posts https://v.douyin.com/eh55UYC
   deno run -A douyin.ts likes https://v.douyin.com/ehSh5Cy
   deno run -A douyin.ts likes https://v.douyin.com/ehCbUjE/
   deno170 run -A --unstable demos/src/douyin/h5.ts 124 ekXJHkm>out.md
+  deno170 run -A --unstable demos/src/douyin/h5.ts fromfile scanlist.dat
   `);
-  let tag = new RegExp("记录美好生活！ (http://v.douying.com/.+?/)");
-  // Deno.readTextFile("")
 }
 
 
@@ -519,6 +593,8 @@ export interface ShareItem {
   type: "video"|"user", 
   nickname: string, 
   uid: string, 
+  sec_uid: string, 
+  aweme_id: string, 
   url: string,
   desc: string, 
   cover: string, 
@@ -549,6 +625,15 @@ export interface ItemInfo {
     logid: string
   }
   item_list: VideoInfoFull[]
+}
+
+export interface UserInfo {
+  status_code: number;
+  extra: {
+    now: number
+    logid: string
+  }
+  user_info: Author
 }
 
 export interface VideoInfoFull extends VideoInfo {
@@ -659,6 +744,7 @@ export interface Music {
 
 export interface Author {
   uid: string
+  sec_uid?: string
   short_id: string
   nickname: string
   avatar_larger: {
@@ -681,3 +767,4 @@ export interface Author {
   signature: string
   unique_id: string
 }
+
